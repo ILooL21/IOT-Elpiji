@@ -35,6 +35,10 @@ app.listen(3000, () => {
     res.render("index");
   });
 
+  app.get("/spec", (req, res) => {
+    res.render("spec");
+  });
+
   app.get("/dashboard", (req, res) => {
     isLogin = req.session.user ? true : false;
     if (isLogin) {
