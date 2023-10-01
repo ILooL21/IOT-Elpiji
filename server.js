@@ -10,5 +10,5 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(3000, () => {
-  console.log("Server started on localhost:3000");
+  console.log("Server started on http://localhost:3000");
 });
