@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const expressSession = require("express-session");
+const bcrypt = require("bcrypt");
 
 const { mongoose } = require("./models/database.js");
 const { User } = require("./models/user.js");
@@ -43,6 +44,35 @@ app.listen(3000, () => {
     }
   });
 
+  app.get("/register", (req, res) => {
+    res.render("register");
+  });
+
+  app.post("/register", async (req, res) => {
+    try {
+      const users = await User.findOne({ email: req.body.email });
+      const names = await User.findOne({ name: req.body.name });
+      if (users || names) {
+        // User already exists
+        res.status(400).send("User already exists");
+      } else {
+        // User not found
+        bcrypt.hash(req.body.password, 10, async (err, hash) => {
+          const user = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password: hash,
+          });
+          await user.save();
+          res.redirect("/login");
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.get("/login", (req, res) => {
     isLogin = req.session.user ? true : false;
     if (!isLogin) {
@@ -51,8 +81,29 @@ app.listen(3000, () => {
       res.redirect("/dashboard");
     }
 
-    app.get("/register", (req, res) => {
-      res.render("register");
+    app.post("/login", async (req, res) => {
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(400).send("Email not found");
+      } else {
+        bcrypt.compare(req.body.password, user.password, (err, result) => {
+          if (result) {
+            req.session.user = user;
+            res.redirect("/dashboard");
+          } else {
+            res.redirect("/login");
+          }
+        });
+      }
+    });
+
+    app.get("/logout", (req, res) => {
+      req.session.destroy((err) => {
+        if (err) {
+          return console.log(err);
+        }
+        res.redirect("/");
+      });
     });
   });
 });
