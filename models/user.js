@@ -7,6 +7,12 @@ const User = mongoose.model("User", {
     minlength: 1,
     trim: true,
   },
+  email: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true,
+  },
   password: {
     type: String,
     required: true,
