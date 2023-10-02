@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const expressSession = require("express-session");
 const bcrypt = require("bcrypt");
+const path = require("path");
 
 const { mongoose } = require("./models/database.js");
 const { User } = require("./models/user.js");
@@ -9,6 +10,8 @@ const { User } = require("./models/user.js");
 const app = express();
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "10000mb", parameterLimit: 100000 }));
@@ -25,7 +28,6 @@ app.use(
   })
 );
 
-// ubah jika menggunakan react
 app.set("view engine", "ejs");
 
 app.listen(3000, () => {
@@ -57,10 +59,8 @@ app.listen(3000, () => {
       const users = await User.findOne({ email: req.body.email });
       const names = await User.findOne({ name: req.body.name });
       if (users || names) {
-        // User already exists
         res.status(400).send("User already exists");
       } else {
-        // User not found
         bcrypt.hash(req.body.password, 10, async (err, hash) => {
           const user = new User({
             username: req.body.username,
