@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const expressSession = require("express-session");
 const bcrypt = require("bcrypt");
 const path = require("path");
-// 
+//
 const { mongoose } = require("./models/database.js");
 const { User } = require("./models/user.js");
 
@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "10000mb", parameterLimit: 100000 }));
@@ -51,7 +51,10 @@ app.listen(3000, () => {
   });
 
   app.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", {
+      error: "",
+      message: "",
+    });
   });
 
   app.post("/register", async (req, res) => {
@@ -59,7 +62,10 @@ app.listen(3000, () => {
       const users = await User.findOne({ email: req.body.email });
       const names = await User.findOne({ name: req.body.name });
       if (users || names) {
-        res.status(400).send("User already exists");
+        res.render("register", {
+          error: "User already exists",
+          message: "",
+        });
       } else {
         bcrypt.hash(req.body.password, 10, async (err, hash) => {
           const user = new User({
@@ -80,7 +86,10 @@ app.listen(3000, () => {
   app.get("/login", (req, res) => {
     isLogin = req.session.user ? true : false;
     if (!isLogin) {
-      res.render("login");
+      res.render("login", {
+        message: "",
+        error: "",
+      });
     } else {
       res.redirect("/dashboard");
     }
@@ -88,14 +97,20 @@ app.listen(3000, () => {
     app.post("/login", async (req, res) => {
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
-        return res.status(400).send("Email not found");
+        res.render("login", {
+          error: "Email does not exist",
+          message: "",
+        });
       } else {
         bcrypt.compare(req.body.password, user.password, (err, result) => {
           if (result) {
             req.session.user = user;
             res.redirect("/dashboard");
           } else {
-            res.redirect("/login");
+            res.render("login", {
+              message: "",
+              error: "Wrong password",
+            });
           }
         });
       }
