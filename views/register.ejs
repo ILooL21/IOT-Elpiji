@@ -11,52 +11,36 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
 
-  <body>
-    <a href="/"
-      ><i
-        class="fa-solid fa-house"
-        style="color: #000000"
-      ></i
-    ></a>
-    <div class="container-center">
-      <div class="row">
-        <div class="col">
-          <br />
-          <h1>Connect Your Device</h1>
-          <br />
-          <form action="/register" method="POST">
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                placeholder="Username"
-                name="username"
-                required
-              />
-            </div>
-            <br />
+<body>
+  <a href="/"><i class="fa-solid fa-house" style="color: #000000"></i></a>
+  <div class="container-center">
+    <div class="row">
+      <div class="col">
+        <br />
+        <h1>Connect Your Device</h1>
+        <br>
+        <% if (error !="" ) { %>
+          <div class="alert alert-danger"><%- error %></div>
+          <% } %>
+            <% if (message !="" ) { %>
+              <div class="alert alert-success"><%- message %></div>
+              <% } %>
+                <br />
+                <form action="/register" method="POST">
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Username" name="username" required />
+                  </div>
+                  <br />
 
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="email"
-                placeholder="Email"
-                name="email"
-                required
-              />
-            </div>
-            <br />
+                  <div class="form-group">
+                    <input class="form-control" type="email" placeholder="Email" name="email" required />
+                  </div>
+                  <br />
 
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="password"
-                placeholder="Password"
-                name="password"
-                required
-              />
-            </div>
-            <br />
+                  <div class="form-group">
+                    <input class="form-control" type="password" placeholder="Password" name="password" required />
+                  </div>
+                  <br />
 
                   <input type="submit" class="btn btn-primary" value="CONNECT" />
                 </form>
