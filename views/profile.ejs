@@ -44,10 +44,10 @@
                     <div class="alert alert-danger"><%- error %></div>
                     <% } %>
                         <% if (message !="" ) { %>
-                            <div class="alert alert-success"><%- message %></div>
+                            <div class="alert alert-warning"><%- message %></div>
                             <% } %>
                                 <br />
-                                <form action="/setting" method="POST">
+                                <form action="/changepassword" method="POST">
                                     <div class="form-group">
                                         <input class="form-control" type="email" placeholder="<%- user.username %>"
                                             name="username" disabled />

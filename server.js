@@ -130,6 +130,40 @@ app.listen(3000, () => {
       }
     });
 
+    app.post("/changepassword", async (req, res) => {
+      try {
+        const user = await User.findOne({ email: req.session.user.email });
+        bcrypt.compare(req.body.oldpassword, user.password, async (err, result) => {
+          if (result) {
+            bcrypt.hash(req.body.newpassword, 10, async (err, hash) => {
+              await User.updateOne(
+                { email: req.session.user.email },
+                {
+                  $set: {
+                    password: hash,
+                  },
+                }
+              );
+              res.render("profile", {
+                user: user,
+                error: "",
+                message: "Password changed successfully",
+              });
+            });
+          } else {
+            res.render("profile", {
+              user: user,
+              error: "Wrong password",
+              message: "",
+            });
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+      }
+    });
+
     app.get("/logout", (req, res) => {
       req.session.destroy((err) => {
         if (err) {
