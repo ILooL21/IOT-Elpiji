@@ -116,6 +116,20 @@ app.listen(3000, () => {
       }
     });
 
+    app.get("/profile", async (req, res) => {
+      isLogin = req.session.user ? true : false;
+      if (isLogin) {
+        const id = await User.findOne({ email: req.session.user.email });
+        res.render("profile", {
+          user: id,
+          error: "",
+          message: "",
+        });
+      } else {
+        res.redirect("/login");
+      }
+    });
+
     app.get("/logout", (req, res) => {
       req.session.destroy((err) => {
         if (err) {
