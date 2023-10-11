@@ -1,0 +1,18 @@
+/* Warna 1: #00f3aa
+Warna 2: #9932CC
+Warna 3: #FFA500 */
+
+html {
+  scroll-behavior: smooth;
+}
+nav {
+  border-bottom: solid 1px #ebebec;
+  backdrop-filter: saturate(180%) blur(16px);
+}
+.logo {
+  top: 0px;
+  left: 36px;
+  height: 56px;
+  width: 56px;
+  position: absolute;
+}
