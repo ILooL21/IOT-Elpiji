@@ -16,3 +16,60 @@ nav {
   width: 56px;
   position: absolute;
 }
+.row {
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.container-dashboard {
+  width: 100%;
+  height: 90vh;
+  padding: 5rem;
+  margin-top: 2.5rem;
+}
+.button-dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 33vh;
+}
+.volume-dashboard {
+  height: 33vh;
+  border: solid 2px #9932cc;
+  border-radius: 16px;
+}
+.grafik-dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 33vh;
+  border: solid 1px #ebebec;
+  border-radius: 16px;
+}
+.button-dashboard button {
+  border: solid 1px #00f3aa;
+  background-color: #00f3aa;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50%;
+  font-size: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 200px;
+  height: 200px;
+}
+.volume-dashboard h5 {
+  color: white;
+  background-color: #9932cc;
+  width: 200px;
+  height: 1.5rem;
+  border-radius: 0px 0px 16px 16px;
+  padding-left: 42px;
+}
+.volume-dashboard #VolumeGas {
+  color: #ffa500;
+  font-weight: 600;
+  font-size: 80px;
+  text-align: center;
+  margin-top: 3rem;
+}
