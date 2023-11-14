@@ -62,26 +62,35 @@
             <li class="nav-item ms-4 me-3">
               <a class="nav-link active" href="/profile">Profile</a>
             </li>
-            <li class="nav-item ms-4 me-3">
+            <li class="nav-item ms-4 me-3 logout-button">
               <a class="nav-link active" href="/logout">Logout</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-    w
     <div class="container-dashboard">
       <div class="row">
         <div class="button-dashboard col">
-          <button>ON</button>
+          <h5>Switch Kipas</h5>
+          <label class="switch">
+            <input type="checkbox" id="SwitchOnOff" />
+            <span class="slider switchOnOff"></span>
+          </label>
         </div>
         <div class="volume-dashboard col">
           <h5>Volume Gas</h5>
-          <h3 id="VolumeGas">999 PPM</h3>
+          <div class="volume-dashboard-text">
+            <h3 id="VolumeGas">999</h3>
+            <h3>PPM</h3>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="grafik-dashboard">INI GRAFIK</div>
+        <div class="grafik-dashboard col">
+          <h5>Grafik Volume</h5>
+          <div>INI GRAFIK</div>
+        </div>
       </div>
     </div>
   </body>

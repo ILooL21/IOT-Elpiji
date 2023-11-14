@@ -1,6 +1,7 @@
 nav {
   border-bottom: solid 1px #ebebec;
   backdrop-filter: saturate(180%) blur(16px);
+  font-weight: 600;
 }
 .logo {
   top: 0px;
