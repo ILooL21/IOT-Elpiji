@@ -8,8 +8,7 @@ const mqtt = require("mqtt");
 const app = express();
 
 //MQTT
-// const client = mqtt.connect("mqtt://localhost:1883");
-const client = mqtt.connect("mqtt://test.mosquitto.org");
+const client = mqtt.connect("mqtt://localhost:1883");
 const topic = "VOLUMEGAS";
 
 //Models
