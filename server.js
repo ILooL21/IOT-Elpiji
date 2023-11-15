@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const expressSession = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(expressSession);
 const bcrypt = require("bcrypt");
 const path = require("path");
 const mqtt = require("mqtt");
@@ -15,6 +16,11 @@ const topic = "VOLUMEGAS";
 const { mongoose } = require("./models/database.js");
 const { User } = require("./models/user.js");
 const { Data } = require("./models/data.js");
+
+const store = new MongoDBStore({
+  uri: "mongodb://127.0.0.1:27017/IOT",
+  collection: "sessions",
+});
 
 //Create a socket io server
 const server = require("http").createServer(app);
@@ -55,6 +61,7 @@ app.use(
   expressSession({
     key: "user_sid",
     secret: "iotelpiji",
+    store: store,
     resave: true,
     saveUninitialized: true,
     cookie: {
