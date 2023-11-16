@@ -25,6 +25,7 @@ const store = new MongoDBStore({
 //Create a socket io server
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
+const { type } = require("os");
 const io = new Server(server);
 
 app.use(express.json());
@@ -55,6 +56,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
   });
+  socket.on("switchOnOff", (data) => {
+    client.publish("switchOnOff", data);
+  });
 });
 
 app.use(
@@ -65,7 +69,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: {
-      expires: 600000,
+      expires: 86400000,
     },
   })
 );
