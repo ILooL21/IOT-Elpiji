@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 nav {
-  border-bottom: solid 1px #ebebec;
+  border-bottom: solid 1px #ccc;
   backdrop-filter: saturate(180%) blur(16px);
   font-weight: 600;
 }
@@ -44,6 +44,7 @@ main p {
 .button-gs button {
   margin: 2rem;
   font-size: 20px;
+  font-weight: 600;
   padding: 0.5rem 2rem;
   background-color: #00f3aa;
   border-radius: 5px;

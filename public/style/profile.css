@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 nav {
-  border-bottom: solid 1px #ebebec;
+  border-bottom: solid 1px #ccc;
   backdrop-filter: saturate(180%) blur(16px);
   font-weight: 600;
 }
@@ -28,6 +28,7 @@ nav {
 .button-ch-pass {
   background-color: #00f3aa;
   font-size: 16px;
+  font-weight: 600;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   border: none;

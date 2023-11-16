@@ -34,11 +34,16 @@
   </nav>
   <div class="container-dashboard">
     <div class="row">
+      <div id="StatusDashboard" class="status-dashboard col">
+        <h5>Status Gas</h5>
+        <div class="status-dashboard-text">
+          <h1 id="Bahaya" style="display: none;">Terjadi Kebocoran!!!</h1>
+          <h1 id="Waspada" style="display: none;">Waspada!</h1>
+          <h1 id="Aman">Aman</h1>
+        </div>
+      </div>
       <div class="button-dashboard col">
         <h5>Switch Kipas</h5>
-        <p>status</p>
-        <p id="bahaya" style="display: none;">terjadi kebocoran</p>
-        <p id="aman">aman</p>
         <label class="switch">
           <input type="checkbox" id="SwitchOnOff" />
           <span class="slider switchOnOff"></span>
@@ -48,7 +53,7 @@
         <h5>Volume Gas</h5>
         <div class="volume-dashboard-text">
           <h3 id="VolumeGas">999</h3>
-          <h3>PPM</h3>
+          <h3 id="SatuanPPM">PPM</h3>
         </div>
       </div>
     </div>
@@ -83,11 +88,26 @@
         UpdateVolumeGas(data);
         if (data >= 550) {
           document.getElementById("SwitchOnOff").checked = true;
-          document.getElementById("bahaya").style.display = "block";
-          document.getElementById("aman").style.display = "none";
+          document.getElementById("Bahaya").style.display = "block";
+          document.getElementById("Waspada").style.display = "none";
+          document.getElementById("Aman").style.display = "none";
+          document.getElementById("StatusDashboard").style.backgroundColor = "#ed0505";
+          document.getElementById("VolumeGas").style.color = "#ed0505";
+          document.getElementById("SatuanPPM").style.color = "#ed0505";
+        } else if (data >= 500) {
+          document.getElementById("Bahaya").style.display = "none";
+          document.getElementById("Waspada").style.display = "block";
+          document.getElementById("Aman").style.display = "block";
+          document.getElementById("StatusDashboard").style.backgroundColor = "#FFA500";
+          document.getElementById("VolumeGas").style.color = "#FFA500";
+          document.getElementById("SatuanPPM").style.color = "#FFA500";
         } else {
-          document.getElementById("bahaya").style.display = "none";
-          document.getElementById("aman").style.display = "block";
+          document.getElementById("Bahaya").style.display = "none";
+          document.getElementById("Waspada").style.display = "none";
+          document.getElementById("Aman").style.display = "block";
+          document.getElementById("StatusDashboard").style.backgroundColor = "#00f3aa";
+          document.getElementById("VolumeGas").style.color = "#00f3aa";
+          document.getElementById("SatuanPPM").style.color = "#00f3aa";
         }
       });
 
