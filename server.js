@@ -17,12 +17,13 @@ const { mongoose } = require("./models/database.js");
 const { User } = require("./models/user.js");
 const { Data } = require("./models/data.js");
 
+//Session store
 const store = new MongoDBStore({
   uri: "mongodb://127.0.0.1:27017/IOT",
   collection: "sessions",
 });
 
-//Create a socket io server
+//Socket.io server
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 const { type } = require("os");
@@ -61,6 +62,7 @@ io.on("connection", (socket) => {
   });
 });
 
+//Session
 app.use(
   expressSession({
     key: "user_sid",
@@ -108,7 +110,7 @@ server.listen(8080, () => {
   app.post("/register", async (req, res) => {
     try {
       const users = await User.findOne({ email: req.body.email });
-      const names = await User.findOne({ name: req.body.name });
+      const names = await User.findOne({ name: req.body.username });
       if (users || names) {
         res.render("register", {
           error: "User already exists",
