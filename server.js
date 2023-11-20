@@ -35,6 +35,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "10000mb", parameterLimit: 100000 }));
 
+//Date
+const date = new Date();
+const dd = String(date.getDate()).padStart(2, "0");
+const mm = String(date.getMonth() + 1).padStart(2, "0");
+const yyyy = date.getFullYear();
+
 //Koneksi ke mqtt broker
 client.on("connect", () => {
   console.log("Connected to MQTT broker");
@@ -43,12 +49,7 @@ client.on("connect", () => {
     io.emit("message", payload.toString());
 
     //Simpan data ke database
-    const date = new Date();
-    const dd = String(date.getDate()).padStart(2, "0");
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const yyyy = date.getFullYear();
-    const datas = await Data.findOne({ Date: `${dd}/${mm}/${yyyy}` });
-
+    // const datas = await Data.findOne({ Date: `${dd}/${mm}/${yyyy}` });
     // if (datas) {
     //   await Data.updateOne(
     //     { Date: `${dd}/${mm}/${yyyy}` },
@@ -83,6 +84,13 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
   });
+  socket.on("date", async (data) => {
+    const date = data;
+    console.log(date);
+    const tanggal = await Data.findOne({ Date: date });
+    io.emit("chart", tanggal.Volume);
+  });
+
   socket.on("switchOnOff", (data) => {
     client.publish("switchOnOff", data);
   });
@@ -118,11 +126,13 @@ server.listen(8080, () => {
   });
 
   app.get("/dashboard", async (req, res) => {
+    const today = `${dd}/${mm}/${yyyy}`;
     const tanggal = await Data.find().sort({ Date: 1 });
     isLogin = req.session.user ? true : false;
     if (isLogin) {
       res.render("dashboard", {
         data: tanggal,
+        today: today,
       });
     } else {
       res.redirect("/login");

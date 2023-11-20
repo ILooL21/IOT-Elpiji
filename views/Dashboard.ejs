@@ -35,7 +35,7 @@
   <div class="container-dashboard">
     <div class="row">
       <div id="StatusDashboard" class="status-dashboard col">
-        <h5>Status Gas</h5>
+        <h5 id="StatusDT">Status Gas</h5>
         <div class="status-dashboard-text">
           <h1 id="Bahaya" style="display: none;">Terjadi Kebocoran!!!</h1>
           <h1 id="Waspada" style="display: none;">Waspada!</h1>
@@ -67,7 +67,7 @@
             </option>
             <% }) %>
         </select>
-        <div>
+        <div class="my-chart">
           <canvas id="myChart"></canvas>
         </div>
       </div>
@@ -85,15 +85,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
       crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       var socket = io();
+
+      //membuat grafik menunjukkan data hari ini
+      document.getElementById("date").selectedIndex = document.getElementById("date").length - 1;
+      socket.emit("date", document.getElementById("date").value);
 
       function UpdateVolumeGas(data) {
         document.getElementById("VolumeGas").innerHTML = data;
       }
 
       socket.on("message", function (data) {
-        console.log(data);
         UpdateVolumeGas(data);
         if (data >= 550) {
           document.getElementById("SwitchOnOff").checked = true;
@@ -101,6 +105,8 @@
           document.getElementById("Waspada").style.display = "none";
           document.getElementById("Aman").style.display = "none";
           document.getElementById("StatusDashboard").style.backgroundColor = "#ed0505";
+          document.getElementById("StatusDT").style.backgroundColor = "#fff";
+          document.getElementById("StatusDT").style.color = "#000";
           document.getElementById("VolumeGas").style.color = "#ed0505";
           document.getElementById("SatuanPPM").style.color = "#ed0505";
         } else if (data >= 500 && data < 550) {
@@ -108,6 +114,8 @@
           document.getElementById("Waspada").style.display = "block";
           document.getElementById("Aman").style.display = "block";
           document.getElementById("StatusDashboard").style.backgroundColor = "#FFA500";
+          document.getElementById("StatusDT").style.backgroundColor = "#9932CC";
+          document.getElementById("StatusDT").style.color = "#fff";
           document.getElementById("VolumeGas").style.color = "#FFA500";
           document.getElementById("SatuanPPM").style.color = "#FFA500";
         } else {
@@ -115,6 +123,8 @@
           document.getElementById("Waspada").style.display = "none";
           document.getElementById("Aman").style.display = "block";
           document.getElementById("StatusDashboard").style.backgroundColor = "#00f3aa";
+          document.getElementById("StatusDT").style.backgroundColor = "#9932CC";
+          document.getElementById("StatusDT").style.color = "#fff";
           document.getElementById("VolumeGas").style.color = "#00f3aa";
           document.getElementById("SatuanPPM").style.color = "#00f3aa";
         }
@@ -126,32 +136,62 @@
         }
       });
 
+      // Mencoba Grafik
+      const Ctx = document.getElementById('myChart');
 
-    </script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-      const ctx = document.getElementById('myChart');
-
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1
+      const ChartStyle = {
+        labels: [],
+        datasets: [
+          {
+            label: 'Volume Gas',
+            data: [],
+            borderWidth: 3,
+            reponsive: true,
+            cubicInterpolationMode: 'monotone',
+            fill: true,
+            backgroundColor: '',
+            borderColor: '',
           }]
-        },
+      }
+
+      const ChartConfig = {
+        type: 'line',
+        data: ChartStyle,
         options: {
           scales: {
             y: {
               beginAtZero: true
             }
-          }
+          },
         }
+      }
+
+      const ChartVolume = new Chart(Ctx, ChartConfig);
+
+      function UpdateChart(data) {
+        let timeArray = [];
+        let volumeArray = [];
+        data.forEach(function (datas) {
+          timeArray.push(datas.time);
+          volumeArray.push(datas.volume);
+        });
+        ChartStyle.labels = timeArray;
+        ChartStyle.datasets[0].data = volumeArray;
+        ChartStyle.datasets[0].backgroundColor = 'rgba(153, 50, 204, 0.2)';
+        ChartStyle.datasets[0].borderColor = '#9932CC';
+        ChartVolume.update();
+      }
+
+      socket.on("chart", function (data) {
+        console.log(data);
+        UpdateChart(data);
       });
-    </script> -->
+
+      document.getElementById("date").addEventListener("change", function () {
+        const date = document.getElementById("date").value;
+        socket.emit("date", date);
+      });
+    </script>
 </head>
 
 <body>
