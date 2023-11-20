@@ -26,7 +26,6 @@ const store = new MongoDBStore({
 //Socket.io server
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
-const { type } = require("os");
 const io = new Server(server);
 
 app.use(express.json());
@@ -40,13 +39,40 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10000mb", parameterLimit
 client.on("connect", () => {
   console.log("Connected to MQTT broker");
   client.on("message", async (topic, payload) => {
-    console.log("Received Message:", topic, payload.toString());
+    // console.log("Received Message:", topic, payload.toString());
     io.emit("message", payload.toString());
 
-    // const data = new Data({
-    //   volume: payload.toString(),
-    // });
-    // await data.save();
+    //Simpan data ke database
+    const date = new Date();
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+    const datas = await Data.findOne({ Date: `${dd}/${mm}/${yyyy}` });
+
+    // if (datas) {
+    //   await Data.updateOne(
+    //     { Date: `${dd}/${mm}/${yyyy}` },
+    //     {
+    //       $push: {
+    //         Volume: {
+    //           time: date.toLocaleTimeString(),
+    //           volume: payload.toString(),
+    //         },
+    //       },
+    //     }
+    //   );
+    // } else {
+    //   const data = new Data({
+    //     Date: `${dd}/${mm}/${yyyy}`,
+    //     Volume: [
+    //       {
+    //         time: date.toLocaleTimeString(),
+    //         volume: payload.toString(),
+    //       },
+    //     ],
+    //   });
+    //   await data.save();
+    // }
   });
   client.subscribe(topic);
 });
@@ -91,10 +117,13 @@ server.listen(8080, () => {
     res.render("spec");
   });
 
-  app.get("/dashboard", (req, res) => {
+  app.get("/dashboard", async (req, res) => {
+    const tanggal = await Data.find().sort({ Date: 1 });
     isLogin = req.session.user ? true : false;
     if (isLogin) {
-      res.render("dashboard");
+      res.render("dashboard", {
+        data: tanggal,
+      });
     } else {
       res.redirect("/login");
     }
