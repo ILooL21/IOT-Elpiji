@@ -10,6 +10,9 @@ nav {
   backdrop-filter: saturate(180%) blur(16px);
   font-weight: 600;
 }
+li a:hover {
+  color:#9932CC !important;
+}
 .logo {
   top: 0px;
   left: 36px;
@@ -116,40 +119,44 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .status-dashboard h5 {
+  position: absolute;
+  left: 0;
   color: #fff;
   background-color: #9932cc;
   width: 180px;
   height: 1.7rem;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 12px 0px;
   padding-left: 40px;
-  margin-left: 1rem;
 }
 .button-dashboard h5 {
+  position: absolute;
+  left: 0;
   color: #fff;
   background-color: #9932cc;
   width: 180px;
   height: 1.7rem;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 12px 0px;
   padding-left: 32px;
-  margin-left: 1rem;
 }
 .volume-dashboard h5 {
+  position: absolute;
+  left: 0;
   color: #fff;
   background-color: #9932cc;
   width: 180px;
   height: 1.7rem;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 12px 0px;
   padding-left: 36px;
-  margin-left: 1rem;
 }
 .grafik-dashboard h5 {
+  position: absolute;
+  left: 0;
   color: #fff;
   background-color: #9932cc;
   width: 180px;
   height: 1.7rem;
-  border-radius: 0px 0px 16px 16px;
+  border-radius: 12px 0px;
   padding-left: 28px;
-  margin-left: 1rem;
 }
 .volume-dashboard h3 {
   color: black;

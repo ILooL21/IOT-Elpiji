@@ -86,20 +86,20 @@ client.on("connect", () => {
 });
 
 //Koneksi ke socket io
-io.on("connection", (socket) => {
-  console.log("connected");
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-  });
-  socket.on("date", async (data) => {
-    const dates = data;
-    const tanggal = await Data.findOne({ Date: dates });
-    io.emit("chart", tanggal.Volume);
-  });
-  socket.on("switchOnOff", (data) => {
-    client.publish("switchOnOff", data);
-  });
-});
+// io.on("connection", (socket) => {
+//   console.log("connected");
+//   socket.on("disconnect", () => {
+//     console.log("disconnected");
+//   });
+//   socket.on("date", async (data) => {
+//     const dates = data;
+//     const tanggal = await Data.findOne({ Date: dates });
+//     io.emit("chart", tanggal.Volume);
+//   });
+//   socket.on("switchOnOff", (data) => {
+//     client.publish("switchOnOff", data);
+//   });
+// });
 
 //Session
 app.use(

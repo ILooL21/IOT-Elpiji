@@ -6,6 +6,9 @@ nav {
   backdrop-filter: saturate(180%) blur(16px);
   font-weight: 600;
 }
+li a:hover {
+  color:#9932CC !important;
+}
 .logo {
   top: 0px;
   left: 36px;
