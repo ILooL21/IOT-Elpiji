@@ -35,45 +35,52 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "10000mb", parameterLimit: 100000 }));
 
-//Date
-const date = new Date();
-const dd = String(date.getDate()).padStart(2, "0");
-const mm = String(date.getMonth() + 1).padStart(2, "0");
-const yyyy = date.getFullYear();
+//buat function pendefinisian waktu
+function defineTime() {
+  date = new Date();
+  dd = String(date.getDate()).padStart(2, "0");
+  mm = String(date.getMonth() + 1).padStart(2, "0");
+  yyyy = date.getFullYear();
+  HH = String(date.getHours()).padStart(2, "0");
+  MM = String(date.getMinutes()).padStart(2, "0");
+  SS = String(date.getSeconds()).padStart(2, "0");
+}
+defineTime();
 
 //Koneksi ke mqtt broker
 client.on("connect", () => {
   console.log("Connected to MQTT broker");
   client.on("message", async (topic, payload) => {
-    // console.log("Received Message:", topic, payload.toString());
+    console.log("Received Message:", topic, payload.toString());
+    defineTime();
     io.emit("message", payload.toString());
 
-    //Simpan data ke database
-    // const datas = await Data.findOne({ Date: `${dd}/${mm}/${yyyy}` });
-    // if (datas) {
-    //   await Data.updateOne(
-    //     { Date: `${dd}/${mm}/${yyyy}` },
-    //     {
-    //       $push: {
-    //         Volume: {
-    //           time: date.toLocaleTimeString(),
-    //           volume: payload.toString(),
-    //         },
-    //       },
-    //     }
-    //   );
-    // } else {
-    //   const data = new Data({
-    //     Date: `${dd}/${mm}/${yyyy}`,
-    //     Volume: [
-    //       {
-    //         time: date.toLocaleTimeString(),
-    //         volume: payload.toString(),
-    //       },
-    //     ],
-    //   });
-    //   await data.save();
-    // }
+    // Simpan data ke database
+    const datas = await Data.findOne({ Date: `${dd}/${mm}/${yyyy}` });
+    if (datas) {
+      await Data.updateOne(
+        { Date: `${dd}/${mm}/${yyyy}` },
+        {
+          $push: {
+            Volume: {
+              time: date.toLocaleTimeString(),
+              volume: payload.toString(),
+            },
+          },
+        }
+      );
+    } else {
+      const data = new Data({
+        Date: `${dd}/${mm}/${yyyy}`,
+        Volume: [
+          {
+            time: date.toLocaleTimeString(),
+            volume: payload.toString(),
+          },
+        ],
+      });
+      await data.save();
+    }
   });
   client.subscribe(topic);
 });
@@ -85,12 +92,10 @@ io.on("connection", (socket) => {
     console.log("disconnected");
   });
   socket.on("date", async (data) => {
-    const date = data;
-    console.log(date);
-    const tanggal = await Data.findOne({ Date: date });
+    const dates = data;
+    const tanggal = await Data.findOne({ Date: dates });
     io.emit("chart", tanggal.Volume);
   });
-
   socket.on("switchOnOff", (data) => {
     client.publish("switchOnOff", data);
   });
@@ -126,13 +131,11 @@ server.listen(8080, () => {
   });
 
   app.get("/dashboard", async (req, res) => {
-    const today = `${dd}/${mm}/${yyyy}`;
     const tanggal = await Data.find().sort({ Date: 1 });
     isLogin = req.session.user ? true : false;
     if (isLogin) {
       res.render("dashboard", {
         data: tanggal,
-        today: today,
       });
     } else {
       res.redirect("/login");

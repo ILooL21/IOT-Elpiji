@@ -51,7 +51,7 @@
       </div>
       <div class="volume-dashboard col">
         <h5>Volume Gas</h5>
-        <div class="volume-dashboard-text">
+        <div class="volume-dashboard-text ">
           <h3 id="VolumeGas">999</h3>
           <h3 id="SatuanPPM">PPM</h3>
         </div>
@@ -99,6 +99,7 @@
 
       socket.on("message", function (data) {
         UpdateVolumeGas(data);
+
         if (data >= 550) {
           document.getElementById("SwitchOnOff").checked = true;
           document.getElementById("Bahaya").style.display = "block";
@@ -128,6 +129,11 @@
           document.getElementById("VolumeGas").style.color = "#00f3aa";
           document.getElementById("SatuanPPM").style.color = "#00f3aa";
         }
+        if (document.getElementById("date").selectedIndex === document.getElementById("date").length - 1) {
+          socket.emit("date", document.getElementById("date").value);
+        } else {
+          return;
+        }
       });
 
       document.getElementById("SwitchOnOff").addEventListener("click", function () {
@@ -151,6 +157,7 @@
             fill: true,
             backgroundColor: '',
             borderColor: '',
+            pointRadius: 0,
           }]
       }
 
@@ -163,6 +170,7 @@
               beginAtZero: true
             }
           },
+          aspectRatio: 3.5,
         }
       }
 
@@ -183,7 +191,6 @@
       }
 
       socket.on("chart", function (data) {
-        console.log(data);
         UpdateChart(data);
       });
 
