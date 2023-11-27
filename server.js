@@ -133,6 +133,7 @@ server.listen(8080, () => {
   app.get("/dashboard", async (req, res) => {
     const tanggal = await Data.find().sort({ Date: 1 });
     isLogin = req.session.user ? true : false;
+    console.log(isLogin);
     if (isLogin) {
       res.render("dashboard", {
         data: tanggal,
