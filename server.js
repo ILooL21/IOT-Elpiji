@@ -45,7 +45,6 @@ function defineTime() {
   MM = String(date.getMinutes()).padStart(2, "0");
   SS = String(date.getSeconds()).padStart(2, "0");
 }
-defineTime();
 
 //Koneksi ke mqtt broker
 client.on("connect", () => {
@@ -133,7 +132,6 @@ server.listen(8080, () => {
   app.get("/dashboard", async (req, res) => {
     const tanggal = await Data.find().sort({ Date: 1 });
     isLogin = req.session.user ? true : false;
-    console.log(isLogin);
     if (isLogin) {
       res.render("dashboard", {
         data: tanggal,
