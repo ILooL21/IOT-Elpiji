@@ -92,7 +92,7 @@ io.on("connection", (socket) => {
   });
   socket.on("date", async (data) => {
     const dates = data;
-    const tanggal = await Data.findOne({ Date: dates });
+    const tanggal = await Data.findOne({ Date: dates }).limit(15);
     io.emit("chart", tanggal.Volume);
   });
   socket.on("switchOnOff", (data) => {
@@ -130,7 +130,7 @@ server.listen(8080, () => {
   });
 
   app.get("/dashboard", async (req, res) => {
-    const tanggal = await Data.find().sort({ Date: 1 });
+    const tanggal = await Data.find();
     isLogin = req.session.user ? true : false;
     if (isLogin) {
       res.render("dashboard", {
